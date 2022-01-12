@@ -2,7 +2,7 @@ FROM python:3.8
 
 ENV PYTHONUNBUFFERED 1
 WORKDIR /usr/src/app
-COPY . .
+COPY ../vic0_web .
 RUN pip install --upgrade -i https://pypi.douban.com/simple/ pip 
 RUN pip install  -i https://pypi.douban.com/simple/ -r requirements.txt
 
