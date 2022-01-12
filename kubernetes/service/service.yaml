@@ -1,0 +1,46 @@
+# service_django
+apiVersion: v1
+kind: Service
+metadata:
+  name: service_django
+  namespace: dev
+spec:
+  selector:
+    app: app_django
+  type: NodePort 		# service类型
+  ports:            # django端口
+  - port: 80        
+    nodePort: 80 	
+    targetPort: 80
+
+---
+# service_django
+apiVersion: v1
+kind: Service
+metadata:
+  name: service_mysql
+  namespace: dev
+spec:
+  selector:
+    app: app_mysql
+  type: NodePort 		# service类型
+  ports:            # app_mysql端口
+  - port: 3306        
+    nodePort: 3306 	
+    targetPort: 3306
+
+---
+# service_django
+apiVersion: v1
+kind: Service
+metadata:
+  name: service_redis
+  namespace: dev
+spec:
+  selector:
+    app: app_redis
+  type: NodePort 		# service类型
+  ports:            # app_redis端口
+  - port: 6379        
+    nodePort: 6379 	
+    targetPort: 6379

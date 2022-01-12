@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy_redis
+  namespace: dev
+spec:
+  strategy: 				          # 策略
+    type: RollingUpdate 			# 滚动更新策略
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app_redis
+  template:
+    metadata:
+      labels:
+        app: app_redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:3.0.54
+        resources: 			      # 资源配额
+          limits:  			      # 限制资源（上限）
+            cpu: "300m" 			    # CPU限制，单位是core数
+            memory: "500Mib"
+          requests: 			    # 请求资源（下限）
+            cpu: "100m"  			# CPU限制，单位是core数
+            memory: "200Mib"
+        ports: 
+          - containerPort: 6379
+        command: 
+          - redis-server --port 6379 --requirepass Password@1  --appendonly yes
+        volumeMounts:
+          - name: redis_volume
+            mountPath: /data
+      volumes:
+      - name: nfs-volume
+        nfs:
+          server: 172.26.230.205  		# nfs服务器地址
+          path: /root/data/nfs/redis 		    # 共享文件路径
+          type: DirectoryOrCreate

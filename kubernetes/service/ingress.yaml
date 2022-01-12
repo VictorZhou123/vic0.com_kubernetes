@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-http
+  namespace: dev
+spec:
+  rules:
+  - host: www.vic0.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: app_django
+          servicePort: 80
