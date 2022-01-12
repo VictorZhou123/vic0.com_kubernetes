@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': 'cnblog',
         'USER': 'root',
         'PASSWORD': 'Password@1',
-        'HOST': 'mysql_master_01',
+        'HOST': 'k8smaster',
         'PORT': 3306
     }
 }
@@ -89,7 +89,7 @@ DATABASES = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://redis_master_01:6379/1",
+        "LOCATION": "redis://k8smaster:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "PASSWORD": "Password@1"

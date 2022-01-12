@@ -1,23 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deploy_mysql
+  name: deploy_django
   namespace: dev
 spec:
   strategy: 				          # 策略
     type: RollingUpdate 			# 滚动更新策略
-  replicas: 2
+    rollingUpdate: 					# 滚动更新
+      maxSurge: 30% 					# 最大额外可以存在的副本数，可以为百分比，也可以为整数
+      maxUnavailable: 30% 					# 最大不可用状态的 Pod 的最大值，可以为百分比，也可以为整数
+  replicas: 3
   selector:
     matchLabels:
-      app: app_mysql
+      app: app_django
   template:
     metadata:
       labels:
-        app: app_mysql
+        app: app_django
     spec:
       containers:
-      - name: mysql
-        image: mysql:8.0.27
+      - name: django
+        image: victor/django:1.0
+        imagePullPolicy: IfNotPresent
         resources: 			      # 资源配额
           limits:  			      # 限制资源（上限）
             cpu: "300m" 			    # CPU限制，单位是core数
@@ -25,17 +29,5 @@ spec:
           requests: 			    # 请求资源（下限）
             cpu: "100m"  			# CPU限制，单位是core数
             memory: "100Mib"
-        ports: 
-          - containerPort: 3306
-        env:
-          - name: MYSQL_ROOT_PASSWORD
-            value: "Password@1"
-        volumeMounts:
-          - name: mysql-volume
-            mountPath: /var/lib/mysql
-      volumes:
-      - name: mysql-volume
-        nfs:
-          server: 172.26.230.205  		# nfs服务器地址
-          path: /root/data/nfs/mysql 		    # 共享文件路径
-          type: DirectoryOrCreate
+        ports:
+          - containerPort: 80
